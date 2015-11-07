@@ -2,119 +2,120 @@
 
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe I18n, "Russian Date/Time localization" do
+describe I18n, 'Russian Date/Time localization' do
   before(:all) do
     Russian.init_i18n
-    @date = Date.parse("1985-12-01")
+    @date = Date.parse('1985-12-01')
     @time = Time.local(1985, 12, 01, 16, 05)
   end
 
-  describe "with date formats" do
-    it "should use default format" do
-      l(@date).should == "01.12.1985"
+  describe 'with date formats' do
+    it 'should use default format' do
+      expect(l(@date)).to eq('01.12.1985')
     end
 
-    it "should use short format" do
-      l(@date, :format => :short).should == "01 дек"
+    it 'should use short format' do
+      expect(l(@date, format: :short)).to eq('01 дек')
     end
 
-    it "should use long format" do
-      l(@date, :format => :long).should == "01 декабря 1985"
-    end
-  end
-
-  describe "with date day names" do
-    it "should use day names" do
-      l(@date, :format => "%d %B (%A)").should == "01 декабря (воскресенье)"
-      l(@date, :format => "%d %B %Y года было %A").should == "01 декабря 1985 года было воскресенье"
-    end
-
-    it "should use standalone day names" do
-      l(@date, :format => "%A").should == "Воскресенье"
-      l(@date, :format => "%A, %d %B").should == "Воскресенье, 01 декабря"
-    end
-
-    it "should use abbreviated day names" do
-      l(@date, :format => "%a").should == "Вс"
-      l(@date, :format => "%a, %d %b %Y").should == "Вс, 01 дек 1985"
-    end
-
-    it "should use uppercased day names" do
-      Russian::strftime(@date, "%^a").should == "ВС"
-      Russian::strftime(@date, "%^A").should == "ВОСКРЕСЕНЬЕ"
+    it 'should use long format' do
+      expect(l(@date, format: :long)).to eq('01 декабря 1985')
     end
   end
 
-  describe "with month names" do
-    it "should use month names" do
-      l(@date, :format => "%d %B").should == "01 декабря"
-      l(@date, :format => "%-d %B").should == "1 декабря"
+  describe 'with date day names' do
+    it 'should use day names' do
+      expect(l(@date, format: '%d %B (%A)')).to eq('01 декабря (воскресенье)')
+      expect(l(@date, format: '%d %B %Y года было %A')).to eq('01 декабря 1985 года было воскресенье')
+    end
 
-      if RUBY_VERSION > "1.9.2"
-        l(@date, :format => "%1d %B").should == "1 декабря"
-        l(@date, :format => "%2d %B").should == "01 декабря"
-        l(@date, :format => "%10d %B").should == "0000000001 декабря"
-        l(@date, :format => "%-e %B %Y").should == "1 декабря 1985"
-        l(@date, :format => "%_3d %B %Y").should == "  1 декабря 1985"
-        l(@date, :format => "%3_d %B %Y").should == "%3_d Декабрь 1985"
+    it 'should use standalone day names' do
+      expect(l(@date, format: '%A')).to eq('Воскресенье')
+      expect(l(@date, format: '%A, %d %B')).to eq('Воскресенье, 01 декабря')
+    end
+
+    it 'should use abbreviated day names' do
+      expect(l(@date, format: '%a')).to eq('Вс')
+      expect(l(@date, format: '%a, %d %b %Y')).to eq('Вс, 01 дек 1985')
+    end
+
+    it 'should use uppercased day names' do
+      expect(Russian.strftime(@date, '%^a')).to eq('ВС')
+      expect(Russian.strftime(@date, '%^A')).to eq('ВОСКРЕСЕНЬЕ')
+    end
+  end
+
+  describe 'with month names' do
+    it 'should use month names' do
+      expect(l(@date, format: '%d %B')).to eq('01 декабря')
+      expect(l(@date, format: '%-d %B')).to eq('1 декабря')
+
+      if RUBY_VERSION > '1.9.2'
+        expect(l(@date, format: '%1d %B')).to eq('1 декабря')
+        expect(l(@date, format: '%2d %B')).to eq('01 декабря')
+        expect(l(@date, format: '%10d %B')).to eq('0000000001 декабря')
+        expect(l(@date, format: '%-e %B %Y')).to eq('1 декабря 1985')
+        expect(l(@date, format: '%_3d %B %Y')).to eq('  1 декабря 1985')
+        expect(l(@date, format: '%3_d %B %Y')).to eq('%3_d Декабрь 1985')
       end
 
-      l(@date, :format => "%e %B %Y").should == " 1 декабря 1985"
-      l(@date, :format => "<b>%d</b> %B").should == "<b>01</b> декабря"
-      l(@date, :format => "<strong>%e</strong> %B %Y").should == "<strong> 1</strong> декабря 1985"
-      l(@date, :format => "А было тогда %eе число %B %Y").should == "А было тогда  1е число декабря 1985"
+      expect(l(@date, format: '%e %B %Y')).to eq(' 1 декабря 1985')
+      expect(l(@date, format: '<b>%d</b> %B')).to eq('<b>01</b> декабря')
+      expect(l(@date, format: '<strong>%e</strong> %B %Y')).to eq('<strong> 1</strong> декабря 1985')
+      expect(l(@date, format: 'А было тогда %eе число %B %Y')).to eq('А было тогда  1е число декабря 1985')
     end
 
-    it "should use standalone month names" do
-      l(@date, :format => "%B").should == "Декабрь"
-      l(@date, :format => "%B %Y").should == "Декабрь 1985"
+    it 'should use standalone month names' do
+      expect(l(@date, format: '%B')).to eq('Декабрь')
+      expect(l(@date, format: '%B %Y')).to eq('Декабрь 1985')
     end
 
-    it "should use abbreviated month names" do
-      @date = Date.parse("1985-03-01")
-      l(@date, :format => "%d %b").should == "01 мар"
-      l(@date, :format => "%e %B %Y").should == " 1 марта 1985"
-      l(@date, :format => "<b>%d</b> %B").should == "<b>01</b> марта"
-      l(@date, :format => "<strong>%e</strong> %B %Y").should == "<strong> 1</strong> марта 1985"
+    it 'should use abbreviated month names' do
+      @date = Date.parse('1985-03-01')
+      expect(l(@date, format: '%d %b')).to eq('01 мар')
+      expect(l(@date, format: '%e %B %Y')).to eq(' 1 марта 1985')
+      expect(l(@date, format: '<b>%d</b> %B')).to eq('<b>01</b> марта')
+      expect(l(@date, format: '<strong>%e</strong> %B %Y')).to eq('<strong> 1</strong> марта 1985')
     end
 
-    it "should use uppercased month names" do
-      Russian::strftime(@date, "%^b").should == "ДЕК"
-      Russian::strftime(@date, "%^B").should == "ДЕКАБРЬ"
+    it 'should use uppercased month names' do
+      expect(Russian.strftime(@date, '%^b')).to eq('ДЕК')
+      expect(Russian.strftime(@date, '%^B')).to eq('ДЕКАБРЬ')
     end
 
-    it "should use standalone abbreviated month names" do
-      @date = Date.parse("1985-03-01")
-      l(@date, :format => "%b").should == "мар"
-      l(@date, :format => "%b %Y").should == "мар 1985"
+    it 'should use standalone abbreviated month names' do
+      @date = Date.parse('1985-03-01')
+      expect(l(@date, format: '%b')).to eq('мар')
+      expect(l(@date, format: '%b %Y')).to eq('мар 1985')
     end
   end
 
-  it "should define default date components order: day, month, year" do
-    I18n.backend.translate(Russian.locale, :"date.order").should == [:day, :month, :year]
+  it 'should define default date components order: day, month, year' do
+    expect(I18n.backend.translate(Russian.locale, :'date.order')).to eq [:day, :month, :year]
   end
 
-  describe "with time formats" do
-    it "should use default format" do
-      l(@time).should match(/^Вс, 01 дек 1985, 16:05:00/)
+  describe 'with time formats' do
+    it 'should use default format' do
+      expect(l(@time)).to match(/^Вс, 01 дек 1985, 16:05:00/)
     end
 
-    it "should use short format" do
-      l(@time, :format => :short).should == "01 дек, 16:05"
+    it 'should use short format' do
+      expect(l(@time, format: :short)).to eq '01 дек, 16:05'
     end
 
-    it "should use long format" do
-      l(@time, :format => :long).should == "01 декабря 1985, 16:05"
+    it 'should use long format' do
+      expect(l(@time, format: :long)).to eq '01 декабря 1985, 16:05'
     end
 
-    it "should define am and pm" do
-      I18n.backend.translate(Russian.locale, :"time.am").should_not be_nil
-      I18n.backend.translate(Russian.locale, :"time.pm").should_not be_nil
+    it 'should define am and pm' do
+      expect(I18n.backend.translate(Russian.locale, :'time.am')).to_not be_nil
+      expect(I18n.backend.translate(Russian.locale, :'time.pm')).to_not be_nil
     end
   end
 
   protected
-    def l(object, options = {})
-      I18n.l(object, options.merge( { :locale => Russian.locale }))
-    end
+
+  def l(object, options = {})
+    I18n.l(object, options.merge(locale: Russian.locale))
+  end
 end

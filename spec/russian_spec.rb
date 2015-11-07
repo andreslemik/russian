@@ -5,11 +5,11 @@ require File.dirname(__FILE__) + '/spec_helper'
 describe Russian do
   describe 'with locale' do
     it "should define :'ru' LOCALE" do
-      Russian::LOCALE.should == :ru
+      expect(Russian::LOCALE).to eq(:ru)
     end
 
     it "should provide 'locale' proxy" do
-      Russian.locale.should == Russian::LOCALE
+      expect(Russian.locale).to eq(Russian::LOCALE)
     end
   end
 
@@ -22,31 +22,31 @@ describe Russian do
     it 'should keep existing translations while switching backends' do
       I18n.load_path << File.join(File.dirname(__FILE__), 'fixtures', 'en.yml')
       Russian.init_i18n
-      I18n.t(:foo, locale: :en).should == 'bar'
+      expect(I18n.t(:foo, locale: :en)).to eq('bar')
     end
 
     it 'should keep existing :ru translations while switching backends' do
       I18n.load_path << File.join(File.dirname(__FILE__), 'fixtures', 'ru.yml')
       Russian.init_i18n
-      I18n.t(:'date.formats.default', locale: :ru).should == 'override'
+      expect(I18n.t(:'date.formats.default', locale: :ru)).to eq('override')
     end
 
     it 'should NOT set default locale to Russian locale' do
       locale = I18n.default_locale
       Russian.init_i18n
-      I18n.default_locale.should == locale
+      expect(I18n.default_locale).to eq(locale)
     end
   end
 
   describe 'with localize proxy' do
     before(:each) do
-      @time = mock(:time)
+      @time = double(:time)
       @options = { format: '%d %B %Y' }
     end
 
     %w(l localize).each do |method|
       it "'#{method}' should call I18n backend localize" do
-        I18n.should_receive(:localize)
+        expect(I18n).to receive(:localize)
           .with(@time, @options.merge(locale: Russian.locale))
         Russian.send(method, @time, @options)
       end
@@ -61,7 +61,7 @@ describe Russian do
 
     %w(t translate).each do |method|
       it "'#{method}' should call I18n backend translate" do
-        I18n.should_receive(:translate)
+        expect(I18n).to receive(:translate)
           .with(@object, @options.merge(locale: Russian.locale))
         Russian.send(method, @object, @options)
       end
@@ -70,17 +70,17 @@ describe Russian do
 
   describe 'strftime' do
     before(:each) do
-      @time = mock(:time)
+      @time = double(:time)
     end
 
     it 'should call localize with object and format' do
       format = '%d %B %Y'
-      Russian.should_receive(:localize).with(@time, format: format)
+      expect(Russian).to receive(:localize).with(@time, format: format)
       Russian.strftime(@time, format)
     end
 
     it 'should call localize with object and default format when format is not specified' do
-      Russian.should_receive(:localize).with(@time, format: :default)
+      expect(Russian).to receive(:localize).with(@time, format: :default)
       Russian.strftime(@time)
     end
   end
