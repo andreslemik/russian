@@ -63,12 +63,13 @@ if defined?(ActionView::Helpers::DateTimeSelector)
         #   select_month(Date.today, :use_month_names => %w(Januar Februar Marts ...))
         #
         def select_month(date, options = {}, html_options = {})
-          DateTimeSelector.new(date, options.merge(:use_standalone_month_names => true), html_options).select_month
+          DateTimeSelector.new(date, options.merge(use_standalone_month_names: true), html_options).select_month
         end
       end
 
       class DateTimeSelector #:nodoc:
         private
+
           # Returns translated month names
           #  => [nil, "January", "February", "March",
           #           "April", "May", "June", "July",
@@ -89,7 +90,7 @@ if defined?(ActionView::Helpers::DateTimeSelector)
           def translated_month_names
             if @options[:use_short_month]
               if I18n.backend.send(:lookup, I18n.locale, :'date.common_abbr_month_names')
-                if (@options[:discard_day] || @options[:use_standalone_month_names])
+                if @options[:discard_day] || @options[:use_standalone_month_names]
                   key = :'date.standalone_abbr_month_names'
                 else
                   key = :'date.common_abbr_month_names'
@@ -99,7 +100,7 @@ if defined?(ActionView::Helpers::DateTimeSelector)
               end
             else
               if I18n.backend.send(:lookup, I18n.locale, :'date.common_month_names')
-                if (@options[:discard_day] || @options[:use_standalone_month_names])
+                if @options[:discard_day] || @options[:use_standalone_month_names]
                   key = :'date.standalone_month_names'
                 else
                   key = :'date.common_month_names'
@@ -109,9 +110,8 @@ if defined?(ActionView::Helpers::DateTimeSelector)
               end
             end
 
-            I18n.translate(key, :locale => @options[:locale])
+            I18n.translate(key, locale: @options[:locale])
           end
-
       end
     end
   end

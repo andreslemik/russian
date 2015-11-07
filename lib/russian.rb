@@ -44,19 +44,19 @@ module Russian
 
   # See I18n::translate
   def translate(key, options = {})
-    I18n.translate(key, options.merge({ locale: LOCALE }))
+    I18n.translate(key, options.merge(locale: LOCALE))
   end
   alias_method :t, :translate
 
   # See I18n::localize
   def localize(object, options = {})
-    I18n.localize(object, options.merge({ locale: LOCALE }))
+    I18n.localize(object, options.merge(locale: LOCALE))
   end
   alias_method :l, :localize
 
   # strftime() proxy with Russian localization
   def strftime(object, format = :default)
-    localize(object, { format: check_strftime_format(object, format) })
+    localize(object, format: check_strftime_format(object, format))
   end
 
   # Simple pluralization proxy
@@ -90,10 +90,10 @@ module Russian
     %w(A a B b).each do |key|
       next unless format =~ /%\^#{key}/
       if RUBY_ENGINE == 'jruby'
-        format = format.gsub("%^#{key}", UnicodeUtils.upcase(localize(object, { format: "%#{key}" })))
+        format = format.gsub("%^#{key}", UnicodeUtils.upcase(localize(object, format: "%#{key}")))
       else
-        format = format.gsub("%^#{key}", Unicode.upcase(localize(object, { format: "%#{key}" })))
-              end
+        format = format.gsub("%^#{key}", Unicode.upcase(localize(object, format: "%#{key}")))
+      end
     end
 
     format
